@@ -4,7 +4,11 @@ use Mojolicious::Lite;
 
 get '/' => sub {
   my $self = shift;
-  $self->render('index');
+  my $body = $self->param('body');
+  $self->render(
+    body => $body,
+    template => 'index',
+  );
 };
 
 app->start;
@@ -14,9 +18,10 @@ __DATA__
 % layout 'default';
 % title 'Welcome';
 %= form_for '/' => begin
-  %= text_field 'body'
+  %= text_field 'body', size => 50
   %= submit_button '投稿する'
 % end
+<p><%= $body %></p>
 
 @@ layouts/default.html.ep
 <!DOCTYPE html>
