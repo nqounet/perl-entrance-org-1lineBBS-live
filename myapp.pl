@@ -2,12 +2,21 @@
 use utf8;
 use Mojolicious::Lite;
 
+
+
 get '/' => sub {
-  my $self = shift;
+  my ($self) = @_;
+  $self->render(
+    template => 'index',
+  );
+};
+
+post '/post' => sub {
+  my ($self) = @_;
   my $body = $self->param('body');
   $self->render(
     body => $body,
-    template => 'index',
+    template => 'post',
   );
 };
 
@@ -16,9 +25,17 @@ __DATA__
 
 @@ index.html.ep
 % layout 'default';
-% title 'Welcome';
-%= form_for '/' => begin
-  %= text_field 'body', size => 50
+% title '入力フォーム';
+%= form_for '/post' => (method => 'POST') => begin
+  %= text_field 'body', size => 50, , autofocus => 'autofocus'
+  %= submit_button '投稿する'
+% end
+
+@@ post.html.ep
+% layout 'default';
+% title '出力';
+%= form_for '/post' => (method => 'POST') => begin
+  %= text_field 'body', size => 50, , autofocus => 'autofocus'
   %= submit_button '投稿する'
 % end
 <p><%= $body %></p>
@@ -26,6 +43,6 @@ __DATA__
 @@ layouts/default.html.ep
 <!DOCTYPE html>
 <html>
-  <head><title><%= title %></title></head>
+  <head><title><%= title %> - #Perl入学式 1行掲示板</title></head>
   <body><%= content %></body>
 </html>
