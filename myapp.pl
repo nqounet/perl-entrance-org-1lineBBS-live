@@ -2,8 +2,6 @@
 use utf8;
 use Mojolicious::Lite;
 
-
-
 get '/' => sub {
   my ($self) = @_;
   $self->render(
@@ -14,6 +12,11 @@ get '/' => sub {
 post '/post' => sub {
   my ($self) = @_;
   my $body = $self->param('body');
+  my $base_dir = $self->app->home->detect;
+  my $datafile = qq{$base_dir/myapp.dat};
+  open my $fh, '>>', $datafile or die $!;
+  print $fh qq{$body\n};
+  close $fh;
   $self->render(
     body => $body,
     template => 'post',
