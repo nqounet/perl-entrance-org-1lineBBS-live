@@ -5,7 +5,14 @@ use Encode;
 
 get '/' => sub {
   my ($self) = @_;
+  my $base_dir = $self->app->home->detect;
+  my $datafile = qq{$base_dir/myapp.dat};
+  open my $fh, '<', $datafile or die $!;
+  my @entries = <$fh>;
+  close $fh;
+  @entries = map { decode_utf8($_) } reverse @entries;
   $self->render(
+    entries  => \@entries,
     template => 'index',
   );
 };
@@ -37,6 +44,9 @@ __DATA__
 % layout 'default';
 % title '入力フォーム';
 %= include 'form';
+% for my $entry (@{$entries}) {
+  <p><%= $entry %></p>
+% }
 
 @@ post.html.ep
 % layout 'default';
