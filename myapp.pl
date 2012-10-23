@@ -3,10 +3,16 @@ use utf8;
 use Mojolicious::Lite;
 use Encode;
 
-get '/' => sub {
+helper datafile => sub {
   my ($self) = @_;
   my $base_dir = $self->app->home->detect;
   my $datafile = qq{$base_dir/myapp.dat};
+  return $datafile;
+};
+
+get '/' => sub {
+  my ($self) = @_;
+  my $datafile = $self->datafile;
   open my $fh, '<', $datafile or die $!;
   my @entries = <$fh>;
   close $fh;
@@ -20,8 +26,7 @@ get '/' => sub {
 post '/post' => sub {
   my ($self) = @_;
   my $body = $self->param('body');
-  my $base_dir = $self->app->home->detect;
-  my $datafile = qq{$base_dir/myapp.dat};
+  my $datafile = $self->datafile;
   open my $fh, '>>', $datafile or die $!;
   print $fh encode_utf8(qq{$body\n});
   close $fh;
