@@ -30,10 +30,7 @@ post '/post' => sub {
   open my $fh, '>>', $datafile or die $!;
   print $fh encode_utf8(qq{$body\n});
   close $fh;
-  $self->render(
-    body => $body,
-    template => 'post',
-  );
+  $self->redirect_to('/');
 };
 
 app->start;
