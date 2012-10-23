@@ -50,12 +50,6 @@ __DATA__
   <p><%= $entry %></p>
 % }
 
-@@ post.html.ep
-% layout 'default';
-% title '出力';
-%= include 'form';
-<p><%= $body %></p>
-
 @@ layouts/default.html.ep
 <!DOCTYPE html>
 <html>

@@ -23,7 +23,7 @@ $t->post_form_ok('/post' => {body => 'hoge'})
   ->content_like(qr!<p>hoge\s*</p>!)
 ;
 
-# フォームの長い文字列の投稿
+# 長い文字列の投稿
 my $long_param = 'b' x 11000;
 $t->post_form_ok('/post' => {body => $long_param})
   ->status_is(200)
