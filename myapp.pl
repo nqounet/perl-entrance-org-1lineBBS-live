@@ -23,21 +23,21 @@ post '/post' => sub {
 app->start;
 __DATA__
 
+@@ form.html.ep
+%= form_for '/post' => (method => 'POST') => begin
+  %= text_field 'body', size => 50, autofocus => 'autofocus'
+  %= submit_button '投稿する'
+% end
+
 @@ index.html.ep
 % layout 'default';
 % title '入力フォーム';
-%= form_for '/post' => (method => 'POST') => begin
-  %= text_field 'body', size => 50, , autofocus => 'autofocus'
-  %= submit_button '投稿する'
-% end
+%= include 'form';
 
 @@ post.html.ep
 % layout 'default';
 % title '出力';
-%= form_for '/post' => (method => 'POST') => begin
-  %= text_field 'body', size => 50, , autofocus => 'autofocus'
-  %= submit_button '投稿する'
-% end
+%= include 'form';
 <p><%= $body %></p>
 
 @@ layouts/default.html.ep
