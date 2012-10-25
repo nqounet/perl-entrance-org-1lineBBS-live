@@ -1,3 +1,4 @@
+use utf8;
 use Test::More;
 use Test::Mojo;
 
@@ -39,6 +40,15 @@ $t->post_form_ok('/post' => {body => $url})
   ->header_is('X-Powered-By' => 'Mojolicious (Perl)')
   ->content_type_like(qr!text/html!, 'right content type')
   ->content_like(qr!href="$url"!)
+;
+
+# スペースだけ（全角含む）の投稿
+my $space = ' 　　　　　　   　　　　   　';
+$t->post_form_ok('/post' => {body => $space})
+  ->status_is(200)
+  ->header_is('X-Powered-By' => 'Mojolicious (Perl)')
+  ->content_type_like(qr!text/html!, 'right content type')
+  ->content_like(qr!class="error"!)
 ;
 
 done_testing;
