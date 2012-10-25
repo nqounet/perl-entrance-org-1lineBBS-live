@@ -26,6 +26,15 @@ get '/' => sub {
 post '/post' => sub {
   my ($self) = @_;
   my $body = $self->param('body');
+  my $temp = $body;
+  $self->stash(post_status => 'ok');
+  if ($temp =~ s/[\s　]//g) {
+    if ($temp eq '') {
+      $self->stash(post_status => 'validation_error');
+      $self->render;
+      return;
+    }
+  }
   my $datafile = $self->datafile;
   open my $fh, '>>', $datafile or die $!;
   print $fh encode_utf8(qq{$body\n});
@@ -54,6 +63,12 @@ __DATA__
     <p><%= $entry %></p>
   % }
 % }
+
+@@ post.html.ep
+% if ($post_status eq 'validation_error') {
+  <p class="error">入力にエラーがあります</p>
+% }
+%= include 'form';
 
 @@ layouts/default.html.ep
 <!DOCTYPE html>
