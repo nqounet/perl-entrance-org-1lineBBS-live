@@ -26,6 +26,10 @@ get '/' => sub {
 post '/post' => sub {
   my ($self) = @_;
   my $body = $self->param('body');
+  unless ($body) {
+    $self->redirect_to('/');
+    return;
+  }
   my $temp = $body;
   $self->stash(post_status => 'ok');
   if ($temp =~ s/[\s　]//g) {
