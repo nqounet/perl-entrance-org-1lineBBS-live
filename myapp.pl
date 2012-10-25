@@ -47,7 +47,12 @@ __DATA__
 % title '入力フォーム';
 %= include 'form';
 % for my $entry (@{$entries}) {
-  <p><%= $entry %></p>
+  % chomp $entry;
+  % if ($entry =~ m!\Ahttp://!) {
+    <p><a href="<%= $entry %>"><%= $entry %></a></p>
+  % } else {
+    <p><%= $entry %></p>
+  % }
 % }
 
 @@ layouts/default.html.ep
